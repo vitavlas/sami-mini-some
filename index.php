@@ -7,4 +7,4 @@ require_once BASE_PATH . '/database.php';
 
 // APP
 
-echo 'Tietokantayhteys muodostettu onnistuneesti.';
+
