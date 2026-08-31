@@ -1,0 +1,154 @@
+/*** STYLESHEET FOR [MiniSome] ***/
+
+/* ===== General ===== */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #EEEEEE;
+  --bg-secondary: #F3F4F4;
+  --text-primary: #2C2C2C;
+  --text-secondary: #853953;
+  --accent-color: #612D53;
+
+  --alert: #E62727;
+  --success: #6FCF97;
+}
+
+body {
+  color: var(--text-primary);
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.5rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layout {
+  margin-bottom: 3rem;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+/* ===== Navigation ===== */
+
+/* Logo */
+
+.logo {
+  display: block;
+  width: 120px;
+  height: 60px;
+  flex-shrink: 0;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Menu */
+
+.menu {
+  display: flex;
+  gap: 1rem;
+  list-style-type: none;
+}
+
+.menu-link {
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  border: 1px solid var(--text-secondary);
+  transition: background-color .5s, color .3s;
+
+  &:hover {
+    background-color: var(--text-secondary);
+    color: var(--bg-secondary);
+  }
+}
+
+/* ===== Content ===== */
+
+/* Cards */
+
+.card-list {
+  display: grid;
+  place-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: var(--bg-primary);
+}
+
+.card {
+  width: 100%;
+  max-width: 800px;
+  background-color: #fff;
+}
+
+.card-wrapper {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--bg-secondary);
+  border-radius: 0.5rem;
+}
+
+.card-avatar {
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.card-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  margin: 0;
+  color: var(--accent-color);
+}
+
+.card-content {
+}
+
+.card-infobar {
+  display: flex;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+.post-date {
+}

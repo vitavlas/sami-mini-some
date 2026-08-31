@@ -1,13 +1,14 @@
 <?php
 // formatted post time
 $date = new DateTime($row['created_at']);
-$formatted_date = $date->format('d.m.Y \k\l\o H:i');
+$formatted_date = $date->format('d.m.Y');
+$formatted_time = $date->format('H:i');
 ?>
 
 <article class="card">
     <div class="card-wrapper">
         <div class="card-avatar">
-            <img src="" alt="User profile avatar">
+            <img src="https://placehold.co/64x64?text=ava" width="64" height="64" alt="User profile avatar">
         </div>
         <div class="card-section">
             <h3 class="card-title"><?= htmlspecialchars($row['author']) ?></h3>
@@ -21,8 +22,8 @@ $formatted_date = $date->format('d.m.Y \k\l\o H:i');
                 </div>
                 <div class="post-date">
                     <i class="fa-regular fa-clock"></i>
-                    <time datetime="<?= htmlspecialchars($formatted_date) ?>">
-                        <?= htmlspecialchars($formatted_date) ?>
+                    <time datetime="<?= htmlspecialchars($formatted_time) ?>">
+                        <?= htmlspecialchars($formatted_time) ?>
                     </time>
                 </div>
             </div>

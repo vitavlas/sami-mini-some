@@ -1,8 +1,13 @@
+        </div>
     </main>
 
     <footer>
-        Minisome.
-        Copyrights &copy;
+        <div class="container">
+            <div class="footer-inner">
+                Minisome.
+                Copyrights &copy;
+            </div>
+        </div>
     </footer>
 </body>
 </html>
