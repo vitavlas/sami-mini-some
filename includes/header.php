@@ -11,17 +11,20 @@
     <header class="header">
         <div class="container">
             <div class="header-inner">
-                <a href="/" class="logo">
+                <a href="index.php" class="logo">
                     <img src="https://placehold.co/120x60?text=MINISOME" width="120" height="60" alt="Site logo">
                 </a>
                 <nav>
                     <ul class="menu">
                         <li>
-                            <a href="#!" class="menu-link">Julkaisut</a>
+                            <a href="index.php?page=home" class="menu-link">Julkaisut</a>
                         </li>
                         <li>
-                            <a href="#!" class="menu-link">Kirjaudu sisään</a>
+                            <a href="index.php?page=new-post" class="menu-link">Uusi julkaisu</a>
                         </li>
+                        <!-- <li>
+                            <a href="#!" class="menu-link">Kirjaudu sisään</a>
+                        </li> -->
                     </ul>
                 </nav>
 

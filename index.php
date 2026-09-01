@@ -9,6 +9,9 @@ $page = $_GET['page'] ?? 'home';
 // routes
 require_once BASE_PATH . '/config/routes.php';
 
+// helpers
+require_once BASE_PATH . '/config/helpers.php';
+
 // db connection
 require_once BASE_PATH . '/config/database.php';
 

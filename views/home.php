@@ -11,7 +11,7 @@ $result = mysqli_query($conn, $query);
             include BASE_PATH . '/includes/card.php';
         }
     } else {
-        echo "Ei ole yhtä julkaisua.";
+        echo "<p>Ei ole yhtä julkaisua.</p>";
     }
     ?>
 
