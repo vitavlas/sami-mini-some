@@ -28,5 +28,11 @@ $formatted_time = $date->format('H:i');
                 </div>
             </div>
         </div>
+        <div class="card-actions">
+            <a class="action-link" href="index.php?page=update-post&post-id=<?= htmlspecialchars($row['id']) ?>">
+                <i class="fa-regular fa-pen-to-square"></i>
+                 Muokkaa
+            </a>
+        </div>
     </div>
 </article>

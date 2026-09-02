@@ -1,4 +1,5 @@
 <section class="post-form">
+    <h2 class="section-title">Luo Uusi Julkaisu</h2>
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST'):

@@ -1,9 +1,10 @@
 <?php
-$query = 'SELECT * FROM posts';
+$query = "SELECT * FROM posts";
 $result = mysqli_query($conn, $query);
 ?>
 
 <div class="card-list">
+    <h2 class="section-title">Viimeisimmät Julkaisut</h2>
 
     <?php
     if (mysqli_num_rows($result) > 0) {

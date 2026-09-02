@@ -11,8 +11,9 @@
 :root {
   --bg-primary: #EEEEEE;
   --bg-secondary: #F3F4F4;
-  --text-primary: #2C2C2C;
+  --text-primary: #2c2c2c;
   --text-secondary: #853953;
+  --text-muted: rgb(44 44 44 / 0.5);
   --accent-color: #612D53;
 
   --alert: #E62727;
@@ -53,6 +54,17 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 0.875rem;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-title {
+  margin-bottom: 3rem;
+  color: var(--accent-color);
 }
 
 /* ===== Navigation ===== */
@@ -137,8 +149,13 @@ body {
 }
 
 .card-section {
+  flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.card-actions {
+  
 }
 
 .card-title {
@@ -214,6 +231,7 @@ body {
 
   &::placeholder {
     font-size: 0.875rem;
+    color: var(--text-muted);
   }
 
   &:focus {
