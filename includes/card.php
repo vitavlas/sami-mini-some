@@ -33,6 +33,10 @@ $formatted_time = $date->format('H:i');
                 <i class="fa-regular fa-pen-to-square"></i>
                  Muokkaa
             </a>
+            <a class="action-link action-link--alert" href="index.php?page=delete-post&post-id=<?= htmlspecialchars($row['id']) ?>">
+                <i class="fa-regular fa-trash-can"></i>
+                 Poista
+            </a>
         </div>
     </div>
 </article>
