@@ -6,9 +6,12 @@
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     $post_id = (int) $_POST['post-id'];
-    $query = "DELETE FROM posts WHERE id = $post_id";
 
-    if ($result = mysqli_query($conn, $query)):
+    $query = "DELETE FROM posts WHERE id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "i", $post_id);
+
+    if (mysqli_stmt_execute($stmt)):
 ?>
 
     <div class="alert alert-success">
@@ -30,10 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET'):
 // Get requested post data
-$post_id = $_GET['post-id'];
+$post_id = (int) $_GET['post-id'];
 
-$query = "SELECT id FROM posts WHERE id = $post_id";
-if ($result = mysqli_query($conn, $query)):
+$query = "SELECT id FROM posts WHERE id = ?";
+$stmt = mysqli_prepare($conn, $query);
+mysqli_stmt_bind_param($stmt, "i", $post_id);
+mysqli_stmt_execute($stmt);
+
+if ($result = mysqli_stmt_get_result($stmt)):
 ?>
 
     <!-- Form -->

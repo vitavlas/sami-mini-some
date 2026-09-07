@@ -37,9 +37,12 @@ if($validated['isValid']):
     $post_id = (int) $_POST['post-id'];
     $author = $validated["data"]["author"];
     $post_content = $validated["data"]["post"];
-    $query = "UPDATE posts SET author = '$author', content = '$post_content' WHERE id = $post_id";
 
-    if ($result = mysqli_query($conn, $query)):
+    $query = "UPDATE posts SET author = ?, content = ? WHERE id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "ssi", $author, $post_content, $post_id);
+
+    if (mysqli_stmt_execute($stmt)):
         $_POST = [];
 ?>
 
@@ -75,12 +78,15 @@ if($validated['isValid']):
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET'):
     // Get requested post data
-    $post_id = $_GET['post-id'];
+    $post_id = (int) $_GET['post-id'];
     
-    $query = "SELECT * FROM posts WHERE id = $post_id";
-    $result = mysqli_query($conn, $query);
+    $query = "SELECT * FROM posts WHERE id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "i", $post_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     
-    $row = mysqli_fetch_assoc($result);
+    if ($row = mysqli_fetch_assoc($result)):
 ?>
 
 <!-- Form -->
@@ -107,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
 </div>
 
 <?php
+endif;
 endif;
 ?>
 

@@ -34,9 +34,12 @@ if($validated['isValid']):
     // Save new post to the DB
     $author = $validated["data"]["author"];
     $post_content = $validated["data"]["post"];
-    $query = "INSERT INTO posts (author, content) VALUES ('$author', '$post_content')";
 
-    if ($result = mysqli_query($conn, $query)):
+    $query = "INSERT INTO posts (author, content) VALUES (?, ?)";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "ss", $author, $post_content);
+
+    if (mysqli_stmt_execute($stmt)):
         $_POST = [];
 ?>
 
