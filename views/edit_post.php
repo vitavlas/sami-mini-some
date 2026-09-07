@@ -113,7 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
 </div>
 
 <?php
-endif;
+    else:
+        echo "<p>Hakemaasi julkaisua ei löytynyt! Kokeile toista hakusanaa.</p>";
+    endif;
 endif;
 ?>
 

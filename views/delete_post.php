@@ -39,8 +39,9 @@ $query = "SELECT id FROM posts WHERE id = ?";
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "i", $post_id);
 mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
-if ($result = mysqli_stmt_get_result($stmt)):
+if (mysqli_num_rows($result) > 0):
 ?>
 
     <!-- Form -->
@@ -56,7 +57,7 @@ if ($result = mysqli_stmt_get_result($stmt)):
 
     <?php
         else:
-            echo "<p>Tapahtui tuntematon virhe. Yritä uudelleen.</p>";
+            echo "<p>Hakemaasi julkaisua ei löytynyt! Kokeile toista hakusanaa.</p>";
         endif;
     ?>
 
