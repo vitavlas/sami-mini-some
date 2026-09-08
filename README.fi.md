@@ -1,24 +1,24 @@
 # MiniSome
 
-MiniSome is a small social media-style web application built as an educational project.
+MiniSome on pieni some- tyylinen verkkosovellus, joka on toteutettu oppimisprojektina.
 
-The project focuses on learning the fundamentals of connecting between PHP and MySQL. No PHP frameworks are used. The project keeps the structure simple to make the underlying concepts easier to understand.
+Projektin tavoitteena on opetella PHP ja MySQL välisen yhteyden perusteita. PHP- frameworkia ei käytetä. Projektin rakenne pidetään yksinkertaisena, jotta taustalla olevat perusasiat olisi helpompi ymmärtää.
 
-## ✨ Features
+## ✨ Ominaisuudet
 
-* View posts
-* Create new posts
-* Edit existing posts
-* Delete posts
-* Simple URL-based routing
-* Form validation
-* Error/success messages
-* Wrong user input handling
-* Basic protection against SQL injection
+* Julkaisujen katselu
+* Uusien julkaisujen luominen
+* Olemassa olevien julkaisujen muokkaaminen
+* Julkaisujen poistaminen
+* Yksinkertainen URL-osoitteisiin perustuva reititys
+* Lomakkeiden validointi
+* Virhe- ja onnistumisviestit
+* Virheellisen käyttäjän syötteen käsittely
+* SQL-injektioiden perussuojaus
 
-## 🧱 Project Structure
+## 🧱 Projektin Rakenne
 
-The project uses `index.php` as a simple front controller.
+Projektissa käytetään `index.php` tiedostoa yksinkertaisena front kontrollerina.
 
 ```
 MINISOME/
@@ -43,9 +43,9 @@ MINISOME/
 └── README.md
 ```
 
-## ⚙️ Settings
+## ⚙️ Asetukset
 
-### Database
+### Tietokanta
 
 ```sql
 -- phpMyAdmin SQL Dump
@@ -107,17 +107,11 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 ```
 
-## 🚀 Getting Started
+## 🚀 Käyttöönotto
 
-The project can be run using a local environment such as WAMP.
+Projektiin voidaan tutustua paikallisen kehitysympäristön avulla, kuten WAMP.
 
-1. Clone the repository [https://github.com/vitavlas/sami-mini-some.git](https://github.com/vitavlas/sami-mini-some.git).
-2. Create a MySQL database named `minisome`.
-3. Import the SQL file as described in **Settings → Database**.
-4. Open the project through your local web server.
-
-## 💡 Notes
-
-### Languages
-
-[English](README.md) | [Suomi](README.fi.md)
+1. Kloonaa repositorio [https://github.com/vitavlas/sami-mini-some.git](https://github.com/vitavlas/sami-mini-some.git).
+2. Luo MySQL- tietokanta nimeltä `minisome`.
+3. Tuo SQL- tiedosto kohdassa **Asetukset → Tietokanta** kuvatulla tavalla.
+4. Avaa projekti paikallisen web-palvelimesi kautta.

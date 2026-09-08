@@ -24,8 +24,8 @@ include_once BASE_PATH . '/includes/header.php';
 if (array_key_exists($page, $routes)) {
     include_once $routes[$page];
 } else {
-    // TODO: make stylish 404
-    echo "Haluamasi sivua ei löytynyt.";
+    http_response_code(404);
+    echo "Haluamaasi sivua ei löytynyt.";
 }
 
 include_once BASE_PATH . '/includes/footer.php';
