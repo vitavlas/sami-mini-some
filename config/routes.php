@@ -5,4 +5,6 @@ $routes = [
     'new-post' => BASE_PATH . '/views/add_post.php',
     'update-post' => BASE_PATH . '/views/edit_post.php',
     'delete-post' => BASE_PATH . '/views/delete_post.php',
+    'register' => BASE_PATH . '/views/register.php',
+    'login' => BASE_PATH . '/views/login.php',
 ];
