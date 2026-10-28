@@ -7,4 +7,6 @@ $routes = [
     'delete-post' => BASE_PATH . '/views/delete_post.php',
     'register' => BASE_PATH . '/views/register.php',
     'login' => BASE_PATH . '/views/login.php',
+    'logout' => BASE_PATH . '/views/logout.php',
+    'profile' => BASE_PATH . '/views/profile.php',
 ];
