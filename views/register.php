@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'password' => [
             'label' => 'Salasana',
             'type' => 'regex',
-            'rule' => '/^(?!\s*$).+/',
+            'rule' => '/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/',
             'message' => 'Salasanan tulee olla vähintään 8 merkkiä pitkä ja sisältää ainakin yksi kirjain ja yksi numero',
         ],
     ];
