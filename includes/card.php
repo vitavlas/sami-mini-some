@@ -3,6 +3,10 @@
 $date = new DateTime($row['created_at']);
 $formatted_date = $date->format('d.m.Y');
 $formatted_time = $date->format('H:i');
+
+$isOwner = isset($_SESSION['user_id']) 
+        && isset($row['user_id']) 
+        && (int) $_SESSION['user_id'] === (int) $row['user_id'];
 ?>
 
 <article class="card">
@@ -28,15 +32,18 @@ $formatted_time = $date->format('H:i');
                 </div>
             </div>
         </div>
-        <div class="card-actions">
-            <a class="action-link" href="index.php?page=update-post&post-id=<?= htmlspecialchars($row['id']) ?>">
-                <i class="fa-regular fa-pen-to-square"></i>
-                 Muokkaa
-            </a>
-            <a class="action-link action-link--alert" href="index.php?page=delete-post&post-id=<?= htmlspecialchars($row['id']) ?>">
-                <i class="fa-regular fa-trash-can"></i>
-                 Poista
-            </a>
-        </div>
+
+        <?php if ($isOwner): ?>
+            <div class="card-actions">
+                <a class="action-link" href="index.php?page=update-post&post-id=<?= (int) $row['id'] ?>">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                    Muokkaa
+                </a>
+                <a class="action-link action-link--alert" href="index.php?page=delete-post&post-id=<?= (int) $row['id'] ?>">
+                    <i class="fa-regular fa-trash-can"></i>
+                    Poista
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
 </article>

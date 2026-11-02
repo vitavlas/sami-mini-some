@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="alert alert-success">
             <p>Rekisteröinti onnistui!</p>
             <p>
-                <a href="index.php?page=login">Kirjaudu sisään</a>
+                <a href="index.php?page=login" class="action-link">Kirjaudu sisään</a>
             </p>
         </div>
 
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <p>
             Onko sinulla jo tili?
-            <a href="index.php?page=login">Kirjaudu sisään</a>
+            <a href="index.php?page=login" class="action-link">Kirjaudu sisään</a>
         </p>
 
     <?php endif; ?>

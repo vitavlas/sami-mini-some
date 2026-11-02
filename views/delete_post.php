@@ -1,65 +1,107 @@
+<?php
+// Check does user is logged in
+$isLoggedIn = isset($_SESSION['user_id']);
+$userId = $isLoggedIn ? (int) $_SESSION['user_id'] : 0;
+
+// Response data preparation
+$success = false;
+$canDelete = false;
+
+$errors = [];
+$postId = 0;
+
+// Process request
+if (!$isLoggedIn) {
+    $errors[] = 'Kirjaudu sisään poistaaksesi julkaisun.';
+} else {
+    $requestId = $_SERVER['REQUEST_METHOD'] === 'POST'
+        ? ($_POST['post-id'] ?? '')
+        : ($_GET['post-id'] ?? '');
+
+    $postId = (int) $requestId;
+
+    // Check ownership
+    $stmt = $conn->prepare(
+        'SELECT id FROM posts WHERE id = ? AND user_id = ?'
+    );
+
+    $stmt->bind_param(
+        "ii",
+        $postId,
+        $userId
+    );
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $canDelete = $result->num_rows > 0;
+
+    $stmt->close();
+
+    if (!$canDelete) {
+        $errors[] = 'Julkaisua ei löytynyt tai sinulla ei ole oikeutta poistaa sitä.';
+    }
+}
+
+// Delete only after ownership check
+if ($isLoggedIn && $canDelete && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $stmt = $conn->prepare(
+        'DELETE FROM posts WHERE id = ? AND user_id = ?'
+    );
+
+    $stmt->bind_param(
+        "ii",
+        $postId,
+        $userId
+    );
+
+    if ($stmt->execute()) {
+        $success = $stmt->affected_rows === 1;
+
+        if (!$success) {
+            $errors[] = 'Julkaisua ei poistettu.';
+        }
+    } else {
+        $errors[] = 'Julkaisun poistaminen epäonnistui. Yritä uudelleen.';
+    }
+
+    $stmt->close();
+    $canDelete = false;
+}
+?>
+
+
 <section class="post-form">
     <h2 class="section-title">Julkaisun Poistaminen</h2>
 
-<?php
-/* ===== DELETE post ===== */ 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST'):
-    $post_id = (int) $_POST['post-id'];
-
-    $query = "DELETE FROM posts WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $post_id);
-
-    if (mysqli_stmt_execute($stmt)):
-?>
-
-    <div class="alert alert-success">
-        <p>Julkaisu poistettu onnistuneesti.</p>
-    </div>
-
-    <?php else: ?>
-
-    <div class="alert alert-error">
-        <p>Julkaisun poistaminen epäonnistui. Yritä uudelleen.</p>
-    </div>
-
-    <?php endif; ?>
+    <?php if ($success): ?>
+        <div class="alert alert-success">
+            <p>Julkaisu poistettu onnistuneesti.</p>
+        </div>
     <?php endif; ?>
 
+    <?php if (!empty($errors)): ?>
 
-<?php
-/* ===== DISPLAY alert message ===== */ 
+        <div class="alert alert-error">
+            <?php foreach ($errors as $error_msg): ?>
+                <p><i class="fa-solid fa-circle-info"></i> <?= htmlspecialchars($error_msg) ?></p>
+            <?php endforeach; ?>
+        </div>
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET'):
-// Get requested post data
-$post_id = (int) $_GET['post-id'];
+    <?php endif; ?>
 
-$query = "SELECT id FROM posts WHERE id = ?";
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "i", $post_id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-if (mysqli_num_rows($result) > 0):
-?>
+    <?php if ($canDelete): ?>
 
     <!-- Form -->
     <div class="form-wrapper">
-        <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=delete-post&post_id=<?= $post_id ?>" method="POST" name="delete_post">
+        <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=delete-post&post_id=<?= $postId ?>" method="POST" name="delete_post">
             <p>Haluatko varmasti poistaa julkaisun?</p>
 
-            <input type="hidden" name="post-id" value="<?= htmlspecialchars($post_id) ?>">
+            <input type="hidden" name="post-id" value="<?= $postId ?>">
 
-            <button class="form-button form-button--alert" type="submit" >Poista</button>
+            <button class="form-button form-button--alert" type="submit">Poista</button>
         </form>
     </div>
-
-    <?php
-        else:
-            echo "<p>Hakemaasi julkaisua ei löytynyt! Kokeile toista hakusanaa.</p>";
-        endif;
-    ?>
 
     <?php endif; ?>
 

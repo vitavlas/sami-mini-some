@@ -267,12 +267,13 @@ body {
 
 .form-input {
   min-width: 250px;
-  max-width: 50%;
+  max-width: 100%;
 }
 
 .form-textarea {
   width: 100%;
   min-height: 150px;
+  resize: vertical;
 }
 
 .form-button {

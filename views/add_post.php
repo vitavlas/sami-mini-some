@@ -3,6 +3,7 @@
 $isLoggedIn = isset($_SESSION['user_id']);
 $username = $isLoggedIn ? $_SESSION['username'] : '';
 
+// Response data preparation
 $success = false;
 $postContent = '';
 
@@ -67,7 +68,7 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <p>
-            <a href="index.php?page=login">Kirjaudu sisään</a>
+            <a href="index.php?page=login" class="action-link">Kirjaudu sisään</a>
         </p>
 
     <?php else: ?>

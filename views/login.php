@@ -94,6 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <p>
         Ei vielä tiliä?
-        <a href="index.php?page=register">Rekisteröidy</a>
+        <a href="index.php?page=register" class="action-link">Rekisteröidy</a>
     </p>
 </section>

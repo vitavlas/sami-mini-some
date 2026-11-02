@@ -1,23 +1,60 @@
-<section class="post-form">
-    <h2 class="section-title">Julkaisun Muokkaus</h2>
-
 <?php
-/* ===== UPDATE post data ===== */ 
+// Check does user is logged in
+$isLoggedIn = isset($_SESSION['user_id']);
+$userId = $isLoggedIn ? (int) $_SESSION['user_id'] : 0;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST'):
-    // Validate form inputs
-     $input_data = [
-        'author' => $_POST['post-author'] ?: '',
+// Response data preparation
+$success = false;
+$canEdit = false;
+
+$errors = [];
+$row = null;
+
+$postId = 0;
+$postContent = '';
+
+// Process request
+if (!$isLoggedIn) {
+    $errors[] = 'Kirjaudu sisään muokataksesi julkaisua.';
+} else {
+    $requestId = $_SERVER['REQUEST_METHOD'] === 'POST'
+        ? ($_POST['post-id'] ?? '')
+        : ($_GET['post-id'] ?? '');
+
+    $postId = (int) $requestId;
+
+    // Fetch post data for current user
+    $stmt = $conn->prepare(
+        'SELECT id, author, content FROM posts WHERE id = ? AND user_id = ?'
+    );
+
+    $stmt->bind_param(
+        "ii",
+        $postId,
+        $userId
+    );
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+
+    // Check does user have rights to edit the post
+    $canEdit = ($row !== null);
+
+    if (!$canEdit) {
+        $errors[] = 'Julkaisua ei löytynyt tai sinulla ei ole oikeutta muokata sitä.';
+    }
+}
+
+// POST processing
+if ($isLoggedIn && $canEdit && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validate form input
+    $input_data = [
         'post' => $_POST['post-message'] ?: '',
     ];
 
     $patterns = [
-        'author' => [
-            'label' => 'Nimimerkki',
-            'type' => 'regex',
-            'rule' => '/^[a-zA-Z0-9 \-]+$/',
-            'message' => 'Kelvoton nimimerkki',
-        ],
         'post' => [
             'label' => 'Viesti',
             'type' => 'regex',
@@ -28,95 +65,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 
     $sanitized = sanitizeInput($input_data);
     $validated = validateInput($patterns, $sanitized);
+
+    $errors = array_merge($errors, $validated['errors']);
+
+    if (empty($errors)) {
+        $postContent = $validated['data']['post'];
+
+        $stmt = $conn->prepare('UPDATE posts SET content = ? WHERE id = ? AND user_id = ?');
+
+        $stmt->bind_param(
+            "sii",
+            $postContent,
+            $postId,
+            $userId
+        );
+
+        if ($stmt->execute()) {
+            $success = true;
+            $row['content'] = $postContent;
+        } else {
+            $errors[] = 'Julkaisun päivittäminen epäonnistui. Yritä uudelleen.';
+        }
+
+        $stmt->close();
+    }
+
+
+    // Keep submitted content if validation fails
+    if (!empty($errors)) {
+        $row['content'] = $_POST['post-message'];
+    }
+}
 ?>
 
-<!-- Form send status messages -->
-<?php
-if($validated['isValid']):
-    // Update post
-    $post_id = (int) $_POST['post-id'];
-    $author = $validated["data"]["author"];
-    $post_content = $validated["data"]["post"];
 
-    $query = "UPDATE posts SET author = ?, content = ? WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssi", $author, $post_content, $post_id);
+<section class="post-form">
+    <h2 class="section-title">Julkaisun Muokkaus</h2>
 
-    if (mysqli_stmt_execute($stmt)):
-        $_POST = [];
-?>
-
-    <div class="alert alert-success">
-        <p>Julkaisu päivitetty!</p>
-    </div>
-
-    <?php else: ?>
-
-    <div class="alert alert-error">
-        <p>Julkaisun päivittäminen epäonnistui. Yritä uudelleen.</p>
-    </div>
-
+     <?php if ($success): ?>
+        <div class="alert alert-success">
+            <p>Julkaisu päivitetty!</p>
+        </div>
     <?php endif; ?>
 
-<?php else: ?>
-
-    <?php if (!empty($validated['errors'])): ?>
+    <?php if (!empty($errors)): ?>
 
     <div class="alert alert-error">
-        <?php foreach ($validated['errors'] as $error_msg): ?>
+        <?php foreach ($errors as $error_msg): ?>
         <p><i class="fa-solid fa-circle-info"></i> <?= htmlspecialchars($error_msg) ?></p>
         <?php endforeach; ?>
     </div>
 
     <?php endif; ?>
-    
-<?php endif; ?>
-<?php endif; ?>
 
-<?php
-/* ===== DISPLAY post data ===== */ 
+    <?php if ($canEdit && $row !== null): ?>
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET'):
-    // Get requested post data
-    $post_id = (int) $_GET['post-id'];
-    
-    $query = "SELECT * FROM posts WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $post_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    
-    if ($row = mysqli_fetch_assoc($result)):
-?>
+    <!-- Form -->
+    <div class="form-wrapper">
+        <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=update-post&post_id=<?= $postId ?>" method="POST" name="update_post">
+            <div class="form-field">
+                <label class="form-label" for="post-author" >Nimimerkki</label>
+                <input 
+                    class="form-input" type="text" id="post-author" name="post-author" 
+                    value="<?= htmlspecialchars($row['author']) ?>"
+                    disabled
+                >
+            </div>
 
-<!-- Form -->
-<div class="form-wrapper">
-    <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=update-post&post_id=<?= $post_id ?>" method="POST" name="update_post">
-        <div class="form-field">
-            <label class="form-label" for="post-author" >Nimimerkki</label>
-            <input 
-                class="form-input" type="text" id="post-author" name="post-author" 
-                value="<?= htmlspecialchars($row['author']) ?>"
-            >
-        </div>
+            <div class="form-field">
+                <label class="form-label" for="post-message" >Viesti</label>
+                <textarea class="form-textarea" id="post-message" name="post-message"
+                ><?= htmlspecialchars($row['content']) ?></textarea>
+            </div>
 
-        <div class="form-field">
-            <label class="form-label" for="post-message" >Viesti</label>
-            <textarea class="form-textarea" id="post-message" name="post-message"
-            ><?= htmlspecialchars($row['content']) ?></textarea>
-        </div>
+            <input type="hidden" name="post-id" value="<?= $postId ?>">
 
-        <input type="hidden" name="post-id" value="<?= htmlspecialchars($row['id']) ?>">
-
-        <button class="form-button" type="submit" >Päivitä</button>
-    </form>
-</div>
-
-<?php
-    else:
-        echo "<p>Hakemaasi julkaisua ei löytynyt! Kokeile toista hakusanaa.</p>";
-    endif;
-endif;
-?>
+            <button class="form-button" type="submit" >Päivitä</button>
+        </form>
+    </div>
+    <?php endif; ?>
 
 </section>
