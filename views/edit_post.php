@@ -24,9 +24,12 @@ if (!$isLoggedIn) {
     $postId = (int) $requestId;
 
     // Fetch post data for current user
-    $stmt = $conn->prepare(
-        'SELECT id, author, content FROM posts WHERE id = ? AND user_id = ?'
-    );
+    $stmt = $conn->prepare('
+        SELECT posts.id, users.username AS author, posts.content
+        FROM posts
+        INNER JOIN users ON posts.user_id = users.id
+        WHERE posts.id = ? AND posts.user_id = ?
+    ');
 
     $stmt->bind_param(
         "ii",

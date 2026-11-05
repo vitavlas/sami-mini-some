@@ -168,7 +168,18 @@ $stmt->close();
 
 // Post list of current user
 
-$stmt = $conn->prepare('SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC');
+$stmt = $conn->prepare('
+    SELECT
+        posts.id,
+        posts.content,
+        posts.user_id,
+        posts.created_at,
+        users.username AS author
+    FROM posts
+    INNER JOIN users ON posts.user_id = users.id
+    WHERE posts.user_id = ?
+    ORDER BY posts.created_at DESC
+');
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 

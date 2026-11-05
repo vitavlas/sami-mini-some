@@ -27,17 +27,15 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($validated['isValid']) {
         // Save new post to the DB
-        $author = $_SESSION["username"];
         $user_id = (int) $_SESSION['user_id'];
         $post_content = $validated["data"]["post"];
 
         $stmt = $conn->prepare(
-            'INSERT INTO posts (author, content, user_id) VALUES (?, ?, ?)'
+            'INSERT INTO posts (content, user_id) VALUES (?, ?)'
         );
 
         $stmt->bind_param(
-            "ssi",
-            $author,
+            "si",
             $post_content,
             $user_id
         );

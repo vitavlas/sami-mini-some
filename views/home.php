@@ -1,5 +1,16 @@
 <?php
-$query = "SELECT * FROM posts";
+$query = "
+    SELECT
+        posts.id,
+        posts.content,
+        posts.user_id,
+        posts.created_at,
+        users.username AS author
+    FROM posts
+    INNER JOIN users ON posts.user_id = users.id
+    ORDER BY posts.created_at DESC
+";
+
 $result = mysqli_query($conn, $query);
 ?>
 
